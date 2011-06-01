@@ -88,6 +88,24 @@ describe "#{ENV['HOME']}/bin/rake" do
       specify { stdout.chomp.should == "#{cwd}/bin/rake []" }
       specify { $?.exitstatus.should == 0 }
     end
+    context 'when run with args' do
+      before { run_rake '-T 1 2 3' }
+      specify { stdout.chomp.should == %Q(#{cwd}/bin/rake ["-T", "1", "2", "3"]) }
+      specify { $?.exitstatus.should == 0 }
+    end
+    context 'when run with non executable rakefile' do
+      before do
+        FileUtils.chmod 0644, "#{cwd}/bin/rake"
+        run_rake
+      end
+      after { FileUtils.chmod 0755, "#{cwd}/bin/rake" }
+      it 'should print messages that the real rakefile would print' do
+        stderr.should include "rake aborted!"
+        stderr.should include "No Rakefile found (looking for: rakefile, Rakefile, rakefile.rb, Rakefile.rb)"
+        stderr.should include "(See full trace by running task with --trace)"
+      end
+      specify { $?.exitstatus.should == 1 }
+    end
   end
   
   after(:all) { FileUtils.rm manifest_filename }
