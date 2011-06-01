@@ -72,7 +72,6 @@ describe "#{ENV['HOME']}/bin/rake" do
   
   context 'with manifest containing cwd' do
     before do
-      cwd = FileUtils.mkdir_p "#{root}/cwd"
       FileUtils.rm_f manifest_filename
       File.open manifest_filename, 'w' do |file|
         file.puts "#{root}/for_testing/"
