@@ -84,6 +84,7 @@ describe "#{ENV['HOME']}/bin/rake" do
       Dir.pwd.should == cwd # just to make sure
     end
     context 'when run with no args' do
+      before { run_rake }
       specify { stdout.chomp.should == "#{cwd}/bin/rake []" }
       specify { $?.exitstatus.should == 0 }
     end
