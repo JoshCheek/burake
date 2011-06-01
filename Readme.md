@@ -1,7 +1,7 @@
 Give me a Burake
 ================
 
-_Makeing it less obnoxious to use Bundler's rake and other binstubs_
+_Making it less obnoxious to use Bundler's rake and other binstubs_
 
 
 
