@@ -8,6 +8,7 @@ FileUtils.mkdir_p "#{root}/tmp"
 stderr_filename = "#{root}/tmp/stderr"
 stdout_filename = "#{root}/tmp/stdout"
 manifest_filename = "#{ENV['HOME']}/.bundler_projects"
+cwd = "#{root}/for_testing/cwd"
 
 
 # make sure we don't clobber real information
@@ -30,7 +31,7 @@ include helpers
 describe "#{ENV['HOME']}/bin/rake" do
   
   before :all do
-    Dir.chdir "#{root}/for_testing/cwd"
+    Dir.chdir cwd
   end
   
   context 'with no manifest' do
@@ -80,10 +81,10 @@ describe "#{ENV['HOME']}/bin/rake" do
         file.puts "#{root}/for_testing/cwd"         # current working dir
         file.puts "#{root}/for_testing/cwd/child"
       end
-      Dir.pwd.should == "#{root}/for_testing/cwd" # just to make sure
+      Dir.pwd.should == cwd # just to make sure
     end
     context 'when run with no args' do
-      specify { stdout.should == 'bin/rake []' }
+      specify { stdout.chomp.should == "#{cwd}/bin/rake []" }
       specify { $?.exitstatus.should == 0 }
     end
   end
