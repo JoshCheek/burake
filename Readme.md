@@ -44,11 +44,11 @@ A couple examples:
 Okay, I want it, what do I do?
 ------------------------------
 
-*Add a dir for binaries*
+**Add a dir for binaries**
 Make a dir at ~/bin (or whatever you want). Then stick `export PATH="~/bin:$PATH"` at the end of your ~/.profile (NOTE: make sure you stick it after any rvm stuff, or rvm will re-commandeer rake from you) This will cause your shell to look in ~/bin for binaries, allowing you to write your own, or to hijack them like we're doing here.
 
 
-*Create the new rake*
+**Create the new rake**
 Take the code below and put it into ~/bin/rake which will get loaded before other rakes. Then `chmod +x ~/bin/rake` to make sure it is executable. 
 
 
@@ -89,17 +89,17 @@ Take the code below and put it into ~/bin/rake which will get loaded before othe
     $rake_binary "$@"
 
 
-*Test that it works*
+**Test that it works**
 Clone this repo and run `./runspec` to make sure it works. (if you don't have rspec: `gem install rspec`)
 
 If your tests passed, then it should work for you. If not, fork this, fix it, send me a pull request.
 
 
-*Create your manifest*
+**Create your manifest**
 Now you're good to go, just add your projects to the manifest, which is the file ~/.bundler_projects I do this by `cd`ing into the project root and typing `pwd >> ~/.bundler_projects` basically, each line is just a path to a project with that has an executable bin/rake.
 
 
-*Make sure you're using binstubs*
+**Make sure you're using binstubs**
 This whole thing assumes you have your rake in your project's bin dir. Bundler will create and populate this for you when you run `bundle install --binstubs`. You should always be using these binaries for this project, or you run the risk of sidestepping the Bundler sandbox and messing up your dependencies.
 
 
