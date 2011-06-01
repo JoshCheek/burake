@@ -1,5 +1,12 @@
-A shell script to commandeer your rake
-======================================
+Give me a Burake
+================
+
+_Makeing it less obnoxious to use Bundler's rake and other binstubs_
+
+
+
+What does it do?
+----------------
 
 So [bundler](http://gembundler.com/) is awesome, but to do it right you have to constantly type `bundle exec rake whatever`, which blows. You can make it a bit better by `bundle install --binstubs` which will give you a bin directory with your executables in it. So now you can run `bin/rake whatever` which is better. But, lets be honest, who forgets and keeps typing `rake whatever`? And who feels just a little bit taxed each time they have to run a rake command, knowing that if it's not the last command or two they ran, then they're going to have to type out the full `bin/rake`? Yeah, me too. I know it sounds silly, but that's how it is.
 
@@ -39,6 +46,7 @@ Okay, I want it, what do I do?
 
 *Add a dir for binaries*
 Make a dir at ~/bin (or whatever you want). Then stick `export PATH="~/bin:$PATH"` at the end of your ~/.profile (NOTE: make sure you stick it after any rvm stuff, or rvm will re-commandeer rake from you) This will cause your shell to look in ~/bin for binaries, allowing you to write your own, or to hijack them like we're doing here.
+
 
 *Create the new rake*
 Take the code below and put it into ~/bin/rake which will get loaded before other rakes. Then `chmod +x ~/bin/rake` to make sure it is executable. 
