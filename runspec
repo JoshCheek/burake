@@ -27,6 +27,17 @@ end
 include helpers
 
 
+# spec behaviour of the real rake, this will get mixed in where appropriate
+shared_examples "the real rake" do
+  it 'should print messages that the real rakefile would print' do
+    stderr.should include "rake aborted!"
+    stderr.should include "No Rakefile found (looking for: rakefile, Rakefile, rakefile.rb, Rakefile.rb)"
+    stderr.should include "(See full trace by running task with --trace)"
+  end
+  specify { $?.exitstatus.should == 1 }
+end
+
+
 # specify behaviour
 describe "#{ENV['HOME']}/bin/rake" do
   
@@ -46,12 +57,7 @@ describe "#{ENV['HOME']}/bin/rake" do
       FileUtils.touch manifest_filename
       run_rake
     end
-    it 'should print messages that the real rakefile would print' do
-      stderr.should include "rake aborted!"
-      stderr.should include "No Rakefile found (looking for: rakefile, Rakefile, rakefile.rb, Rakefile.rb)"
-      stderr.should include "(See full trace by running task with --trace)"
-    end
-    specify { $?.exitstatus.should == 1 }
+    it_behaves_like "the real rake"
   end
   
   context 'with manifest containing dirs that are not ancestors of CWD' do
@@ -63,12 +69,7 @@ describe "#{ENV['HOME']}/bin/rake" do
       end
       run_rake
     end
-    it 'should print messages that the real rakefile would print' do
-      stderr.should include "rake aborted!"
-      stderr.should include "No Rakefile found (looking for: rakefile, Rakefile, rakefile.rb, Rakefile.rb)"
-      stderr.should include "(See full trace by running task with --trace)"
-    end
-    specify { $?.exitstatus.should == 1 }
+    it_behaves_like "the real rake"
   end
   
   context 'with manifest containing cwd' do
@@ -99,12 +100,7 @@ describe "#{ENV['HOME']}/bin/rake" do
         run_rake
       end
       after { FileUtils.chmod 0755, "#{cwd}/bin/rake" }
-      it 'should print messages that the real rakefile would print' do
-        stderr.should include "rake aborted!"
-        stderr.should include "No Rakefile found (looking for: rakefile, Rakefile, rakefile.rb, Rakefile.rb)"
-        stderr.should include "(See full trace by running task with --trace)"
-      end
-      specify { $?.exitstatus.should == 1 }
+      it_behaves_like "the real rake"
     end
   end
   
