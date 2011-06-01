@@ -41,28 +41,29 @@ end
 # specify behaviour
 describe "#{ENV['HOME']}/bin/rake" do
   
-  before :all do
+  before do
     Dir.chdir cwd
+    FileUtils.rm_f manifest_filename
   end
   
   context 'with no manifest' do
-    before { FileUtils.rm_f(manifest_filename); run_rake }
+    before  { run_rake }
     specify { stderr.should include manifest_filename }
     specify { $?.exitstatus.should == 1 }
   end
   
+  
   context 'with empty manifest' do
     before do
-      FileUtils.rm_f manifest_filename
       FileUtils.touch manifest_filename
       run_rake
     end
     it_behaves_like "the real rake"
   end
   
+  
   context 'with manifest containing dirs that are not ancestors of CWD' do
     before do
-      FileUtils.rm_f manifest_filename
       File.open manifest_filename, 'w' do |file|
         file.puts "#{root}/child1"
         file.puts "#{root}/child2"
@@ -72,9 +73,9 @@ describe "#{ENV['HOME']}/bin/rake" do
     it_behaves_like "the real rake"
   end
   
+  
   context 'with manifest containing cwd' do
     before do
-      FileUtils.rm_f manifest_filename
       File.open manifest_filename, 'w' do |file|
         file.puts "#{root}/for_testing/"
         file.puts "#{root}/for_testing/child1"
@@ -84,16 +85,19 @@ describe "#{ENV['HOME']}/bin/rake" do
       end
       Dir.pwd.should == cwd # just to make sure
     end
+    
     context 'when run with no args' do
       before { run_rake }
       specify { stdout.chomp.should == "#{cwd}/bin/rake []" }
       specify { $?.exitstatus.should == 0 }
     end
+    
     context 'when run with args' do
       before { run_rake '-T 1 2 3' }
       specify { stdout.chomp.should == %Q(#{cwd}/bin/rake ["-T", "1", "2", "3"]) }
       specify { $?.exitstatus.should == 0 }
     end
+    
     context 'when run with non executable rakefile' do
       before do
         FileUtils.chmod 0644, "#{cwd}/bin/rake"
@@ -104,5 +108,5 @@ describe "#{ENV['HOME']}/bin/rake" do
     end
   end
   
-  after(:all) { FileUtils.rm manifest_filename }
+  after(:all) { FileUtils.rm_f manifest_filename }
 end
