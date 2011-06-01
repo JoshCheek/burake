@@ -1,0 +1,92 @@
+#!/usr/bin/env rspec   --color   --format=documentation
+
+require 'fileutils'
+
+# establish files
+root = File.expand_path(File.dirname __FILE__)
+FileUtils.mkdir_p "#{root}/tmp"
+stderr_filename = "#{root}/tmp/stderr"
+stdout_filename = "#{root}/tmp/stdout"
+manifest_filename = "#{ENV['HOME']}/.bundler_projects"
+
+
+# make sure we don't clobber real information
+if File.exist? manifest_filename
+  $stderr.puts "You already have a #{manifest_filename}, running this test could clobber it, you should remove it to be safe"
+  exit 1
+end
+
+
+# define helpers
+helpers = Module.new do
+  define_method(:run_rake) { |*args| system "rake #{args.join ' '} 1>#{stdout_filename} 2>#{stderr_filename}" }
+  define_method(:stderr) { @stderr ||= File.read stderr_filename }
+  define_method(:stdout) { @stdout ||= File.read stdout_filename }
+end
+include helpers
+
+
+# specify behaviour
+describe "#{ENV['HOME']}/bin/rake" do
+  
+  before :all do
+    Dir.chdir "#{root}/for_testing/cwd"
+  end
+  
+  context 'with no manifest' do
+    before { FileUtils.rm_f(manifest_filename); run_rake }
+    specify { stderr.should include manifest_filename }
+    specify { $?.exitstatus.should == 1 }
+  end
+  
+  context 'with empty manifest' do
+    before do
+      FileUtils.rm_f manifest_filename
+      FileUtils.touch manifest_filename
+      run_rake
+    end
+    it 'should print messages that the real rakefile would print' do
+      stderr.should include "rake aborted!"
+      stderr.should include "No Rakefile found (looking for: rakefile, Rakefile, rakefile.rb, Rakefile.rb)"
+      stderr.should include "(See full trace by running task with --trace)"
+    end
+    specify { $?.exitstatus.should == 1 }
+  end
+  
+  context 'with manifest containing dirs that are not ancestors of CWD' do
+    before do
+      FileUtils.rm_f manifest_filename
+      File.open manifest_filename, 'w' do |file|
+        file.puts "#{root}/child1"
+        file.puts "#{root}/child2"
+      end
+      run_rake
+    end
+    it 'should print messages that the real rakefile would print' do
+      stderr.should include "rake aborted!"
+      stderr.should include "No Rakefile found (looking for: rakefile, Rakefile, rakefile.rb, Rakefile.rb)"
+      stderr.should include "(See full trace by running task with --trace)"
+    end
+    specify { $?.exitstatus.should == 1 }
+  end
+  
+  context 'with manifest containing cwd' do
+    before do
+      cwd = FileUtils.mkdir_p "#{root}/cwd"
+      FileUtils.rm_f manifest_filename
+      File.open manifest_filename, 'w' do |file|
+        file.puts "#{root}/for_testing/"
+        file.puts "#{root}/for_testing/child1"
+        file.puts "#{root}/for_testing/child2"
+        file.puts "#{root}/for_testing/cwd"         # current working dir
+        file.puts "#{root}/for_testing/cwd/child"
+      end
+    end
+    context 'when run with no args' do
+      specify { stdout.should == 'bin/rake []' }
+      specify { $?.exitstatus.should == 0 }
+    end
+  end
+  
+  after(:all) { FileUtils.rm manifest_filename }
+end
