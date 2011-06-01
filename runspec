@@ -80,6 +80,7 @@ describe "#{ENV['HOME']}/bin/rake" do
         file.puts "#{root}/for_testing/cwd"         # current working dir
         file.puts "#{root}/for_testing/cwd/child"
       end
+      Dir.pwd.should == "#{root}/for_testing/cwd" # just to make sure
     end
     context 'when run with no args' do
       specify { stdout.should == 'bin/rake []' }
