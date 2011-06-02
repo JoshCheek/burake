@@ -93,7 +93,7 @@ Take the code below and put it into ~/bin/rake which will get loaded before othe
 
 **Test that it works**
 
-Clone this repo and run `./runspec` to make sure it works. (if you don't have rspec: `gem install rspec`)
+Clone this repo and run `./burake_spec` to make sure it works. (if you don't have rspec: `gem install rspec`)
 
 If your tests passed, then it should work for you. If not, fork this, fix it, send me a pull request.
 
