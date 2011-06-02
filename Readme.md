@@ -8,7 +8,7 @@ _Making it less obnoxious to use Bundler's rake and other binstubs_
 What does it do?
 ----------------
 
-So [bundler](http://gembundler.com/) is awesome, but to do it right you have to constantly type `bundle exec rake whatever`, which blows. You can make it a bit better by `bundle install --binstubs` which will give you a bin directory with your executables in it. So now you can run `bin/rake whatever` which is better. But, lets be honest, who forgets and keeps typing `rake whatever`? And who feels just a little bit taxed each time they have to run a rake command, knowing that if it's not the last command or two they ran, then they're going to have to type out the full `bin/rake`? Yeah, me too. I know it sounds silly, but that's how it is.
+So [Bundler](http://gembundler.com/) is awesome, but to do it right you have to constantly type `bundle exec rake whatever`, which blows. You can make it a bit better by `bundle install --binstubs` which will give you a bin directory with your executables in it. So now you can run `bin/rake whatever` which is better. But, lets be honest, who forgets and keeps typing `rake whatever`? And who feels just a little bit taxed each time they have to run a rake command, knowing that if it's not the last command or two they ran, then they're going to have to type out the full `bin/rake`? Yeah, me too. I know it sounds silly, but that's how it is.
 
 I thought about a lot of possible solutions, and finally decided this had the best balance between security, easiness, and just doing what you want without having to think about it.
 
