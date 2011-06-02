@@ -86,7 +86,7 @@ Take the code below and put it into ~/bin/rake which will get loaded before othe
     fi
   
 
-    # run the appropriate rakefile, forward the args
+    # run the appropriate rake, forward the args
     $rake_binary "$@"
 
 
