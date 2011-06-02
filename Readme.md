@@ -100,7 +100,7 @@ If your tests passed, then it should work for you. If not, fork this, fix it, se
 
 ###Create your manifest
 
-Now you're good to go, just add your projects to the manifest, which is the file ~/.bundler_projects I do this by `cd`ing into the project root and typing `pwd >> ~/.bundler_projects` basically, each line is just a path to a project with that has an executable bin/rake.
+Now you just need to add your projects to the manifest, which is the file ~/.bundler_projects I do this by `cd`ing into the project root and typing `pwd >> ~/.bundler_projects` basically, each line is just a path to a project with that has an executable bin/rake. This is basically for security, we could just look for a bin/rake in any ancestor dirs, but there is risk associated with that. This should prevent you from running a rake that you didn't explicitly decide to.
 
 
 ###Make sure you're using binstubs
