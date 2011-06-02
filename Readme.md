@@ -61,7 +61,7 @@ Take the code below and put it into ~/bin/rake which will get loaded before othe
 
 
     # exit if missing the manifest
-    if test ! -r $manifest; then
+    if [ ! -r $manifest ]; then
       echo "You need to make a '$manifest' text file which lists the root directories of projects you want to use." 1>&2
       exit 1
     fi
@@ -80,7 +80,7 @@ Take the code below and put it into ~/bin/rake which will get loaded before othe
 
 
     # if no project_root, or no binary, use real rake
-    if test -z "$project_root" || test ! -x "$project_root/bin/rake"; then
+    if [ -z "$project_root" ] || [ ! -x "$project_root/bin/rake" ]; then
       rake_binary=`which rake`
     else
       rake_binary="$project_root/bin/rake"
