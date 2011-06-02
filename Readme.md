@@ -46,7 +46,7 @@ Okay, I want it, what do I do?
 
 **Add a dir for binaries**
 
-Make a dir at ~/bin (or whatever you want). Then stick `export PATH="~/bin:$PATH"` at the end of your ~/.profile (NOTE: make sure you stick it after any rvm stuff, or rvm will re-commandeer rake from you) This will cause your shell to look in ~/bin for binaries, allowing you to write your own, or to hijack them like we're doing here.
+Make a dir at ~/bin (or whatever you want). Then stick `export PATH="~/bin:$PATH"` at the end of your ~/.profile This will cause your shell to look in ~/bin for binaries, allowing you to write your own, or to hijack them like we're doing here. (NOTE: make sure you stick it after any rvm stuff, or rvm will re-hijack rake from you)
 
 
 **Create the new rake**
