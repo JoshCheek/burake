@@ -1,2 +1,4 @@
 #!/usr/bin/env ruby
+
+# right bin :)
 puts "#{__FILE__} #{ARGV.inspect}"
