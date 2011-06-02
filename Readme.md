@@ -69,15 +69,14 @@ Take the code below and put it into ~/bin/rake which will get loaded before othe
 
     # get project dir from manifest that correlates to CWD
     # I tried to do this in bash, but I'm just not good enough to figure out how
-    project_root="$(ruby <<RUBY
-      possibilities  =  File.readlines "$manifest"
+    project_root="$(ruby -e "
+      possibilities  =  File.readlines '$manifest'
       possibilities  =  possibilities.map     { |dir| File.expand_path dir.chomp }
-      matches        =  possibilities.select  { |dir| "$current_dir".start_with? dir }
+      matches        =  possibilities.select  { |dir| '$current_dir'.start_with? dir }
       best_match     =  matches.sort_by       { |dir| dir.length }.last
       print best_match
-    RUBY)"   
-    #"my editor is confused by the above syntax, this line tricks it into highlighting the rest of the file correctly
-
+    ")"
+    
 
     # if no project_root, or no binary, use real rake
     if [ -z "$project_root" ] || [ ! -x "$project_root/bin/rake" ]; then
