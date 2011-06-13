@@ -8,21 +8,32 @@ _Making it less obnoxious to use Bundler's rake and other binstubs_
 What does it do?
 ----------------
 
-So [Bundler](http://gembundler.com/) is awesome, but to do it right you have to constantly type `bundle exec rake whatever`, which blows. You can make it a bit better by `bundle install --binstubs` which will give you a bin directory with your executables in it. So now you can run `bin/rake whatever` which is better. But, lets be honest, who forgets and keeps typing `rake whatever`? And who feels just a little bit taxed each time they have to run a rake command, knowing that if it's not the last command or two they ran, then they're going to have to type out the full `bin/rake`? Yeah, me too. I know it sounds silly, but that's how it is.
+So [Bundler](http://gembundler.com/) is awesome, but to do it right you have to constantly type
+`bundle exec rake whatever`, which blows. You can make it a bit better by `bundle install --binstubs`
+which will give you a bin directory with your executables in it. So now you can run `bin/rake whatever`
+which is better. But, lets be honest, who forgets and keeps typing `rake whatever`? And who feels just a
+little bit taxed each time they have to run a rake command, knowing that if it's not the last command or
+two they ran, then they're going to have to type out the full `bin/rake`? Yeah, me too. I know it sounds
+silly, but that's how it is.
 
-I thought about a lot of possible solutions, and finally decided this had the best balance between security, easiness, and just doing what you want without having to think about it.
+I thought about a lot of possible solutions, and finally decided this had the best balance between security,
+easiness, and just doing what you want without having to think about it.
 
 
 How does it work?
 -----------------
 
-You put your own rake in the path so it gets discovered before all the other rakes. This rake checks a manifest of Bundler projects, and if you're currently in one, it runs _that_ rake, otherwise, it runs system rake (or rvm's rake, if you're using rvm).
+You put your own rake in the path so it gets discovered before all the other rakes. This rake checks a
+manifest of Bundler projects, and if you're currently in one, it runs _that_ rake, otherwise, it runs
+system rake (or rvm's rake, if you're using rvm).
 
 
 What about non-rake binaries?
 -----------------------------
 
-Make them into rake tasks that invoke the correct binary. (note that rake resets your path to the dir of the Rakefile, so regardless of where you invoke rake from, you can invoke the binaries relatively from the dir of the Rakefile)
+Make them into rake tasks that invoke the correct binary. (note that rake resets your path to the dir
+of the Rakefile, so regardless of where you invoke rake from, you can invoke the binaries relatively
+from the dir of the Rakefile)
 
 A couple examples:
 
@@ -46,12 +57,16 @@ Okay, I want it, what do I do?
 
 ###Add a dir for binaries
 
-Make a dir at ~/bin (or whatever you want). Then stick `export PATH="~/bin:$PATH"` at the end of your ~/.profile This will cause your shell to look in ~/bin for binaries, allowing you to write your own, or to hijack them like we're doing here. (NOTE: make sure you stick it after any rvm stuff, or rvm will re-hijack rake from you)
+Make a dir at ~/bin (or whatever you want). Then stick `export PATH="~/bin:$PATH"` at the end of your
+~/.profile This will cause your shell to look in ~/bin for binaries, allowing you to write your own,
+or to hijack them like we're doing here. (NOTE: make sure you stick it after any rvm stuff, or rvm
+will re-hijack rake from you)
 
 
 ###Create the new rake
 
-Take the code below and put it into ~/bin/rake which will get loaded before other rakes. Then `chmod +x ~/bin/rake` to make sure it is executable. 
+Take the code below and put it into ~/bin/rake which will get loaded before other rakes. Then
+`chmod +x ~/bin/rake` to make sure it is executable. 
 
 
     #!/usr/bin/env sh
@@ -100,12 +115,18 @@ If your tests passed, then it should work for you. If not, fork this, fix it, se
 
 ###Create your manifest
 
-Now you just need to add your projects to the manifest, which is the file ~/.bundler_projects I do this by `cd`ing into the project root and typing `pwd >> ~/.bundler_projects` basically, each line is just a path to a project with that has an executable bin/rake. This is basically for security, we could just look for a bin/rake in any ancestor dirs, but there is risk associated with that. This should prevent you from running a rake that you didn't explicitly decide to.
+Now you just need to add your projects to the manifest, which is the file ~/.bundler_projects I do this by `cd`ing
+into the project root and typing `pwd >> ~/.bundler_projects` basically, each line is just a path to a project with
+that has an executable bin/rake. This is basically for security, we could just look for a bin/rake in any ancestor
+dirs, but there is risk associated with that. This should prevent you from running a rake that you didn't explicitly
+decide to.
 
 
 ###Make sure you're using binstubs
 
-This whole thing assumes you have your rake in your project's bin dir. Bundler will create and populate this for you when you run `bundle install --binstubs`. You should always be using these binaries for this project, or you run the risk of sidestepping the Bundler sandbox and messing up your dependencies.
+This whole thing assumes you have your rake in your project's bin dir. Bundler will create and populate this for
+you when you run `bundle install --binstubs`. You should always be using these binaries for this project, or you
+run the risk of sidestepping the Bundler sandbox and messing up your dependencies.
 
 
 Gratz, you're good to go.
