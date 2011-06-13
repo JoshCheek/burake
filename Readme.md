@@ -3,6 +3,14 @@ Give me a Burake
 
 _Making it less obnoxious to use Bundler's rake and other binstubs_
 
+UPDATE:
+-------
+
+If you're using RVM, then `rvm get head`, and this script will be unnecessary. It does the same thing 
+(hijacks rake and then redirects it to ./bin/rake) but works for several common commands, not just rake. 
+And it does it by looking for a Gemfile, so no need to maintain a list of projects. 
+[Check it out](https://rvm.beginrescueend.com/integration/bundler/).
+
 
 
 What does it do?
